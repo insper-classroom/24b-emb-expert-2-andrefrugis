@@ -25,9 +25,12 @@ add_compile_options(
   -Wno-unused-function # we have some for the docs that aren't called
 )
 
+
 if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
   add_compile_options(-Wno-maybe-uninitialized)
 endif()
 
 # Codes subdir:
+add_subdirectory(oled1_lib)
 add_subdirectory(main)
+add_subdirectory(freertos)

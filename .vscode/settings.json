@@ -40,6 +40,9 @@
          "buildTarget": {
              "visibility": "hidden"
          }
+},
+"files.associations": {
+    "spi.h": "c"
 }
 
      
