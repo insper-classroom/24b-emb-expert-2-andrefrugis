@@ -1,35 +1,20 @@
-cmake_minimum_required(VERSION 3.13)
+#set(PICO_SDK_FREERTOS_SOURCE ${PICO_SDK_PATH}/lib/tinyusb/lib/FreeRTOS/FreeRTOS/Source/)
+set(PICO_SDK_FREERTOS_SOURCE FreeRTOS-Kernel)
 
-# Pull in SDK (must be before project)
-include(${CMAKE_SOURCE_DIR}/pico_sdk_import.cmake)
-
-# Pull in FreeRTOS
-set(FREERTOS_KERNEL_PATH ${CMAKE_CURRENT_LIST_DIR}/freertos/FreeRTOS-Kernel)
-include(${CMAKE_SOURCE_DIR}/freertos/FreeRTOS_Kernel_import.cmake)
-
-# Project name
-project(pico-freertos)
-
-pico_sdk_init()
-
-# Configuration projects
-add_executable(pico-freertos
-    main/main.c
+add_library(freertos
+    ${PICO_SDK_FREERTOS_SOURCE}/event_groups.c
+    ${PICO_SDK_FREERTOS_SOURCE}/list.c
+    ${PICO_SDK_FREERTOS_SOURCE}/queue.c
+    ${PICO_SDK_FREERTOS_SOURCE}/stream_buffer.c
+    ${PICO_SDK_FREERTOS_SOURCE}/tasks.c
+    ${PICO_SDK_FREERTOS_SOURCE}/timers.c
+    ${PICO_SDK_FREERTOS_SOURCE}/portable/MemMang/heap_3.c
+#    ${PICO_SDK_FREERTOS_SOURCE}/portable/GCC/ARM_CM0/port.c
+    port.c
 )
 
-target_include_directories(pico-freertos PRIVATE
-    freertos/
+target_include_directories(freertos PUBLIC
+    .
+    ${PICO_SDK_FREERTOS_SOURCE}/include
+    ${PICO_SDK_FREERTOS_SOURCE}/portable/GCC/ARM_CM0
 )
-
-target_link_libraries(pico-freertos PRIVATE
-    pico_stdlib
-    FreeRTOS-Kernel
-    FreeRTOS-Kernel-Heap4
-)
-
-target_compile_options(pico-freertos PRIVATE -Wall)
-
-# Run the entire project in SRAM
-# pico_set_binary_type(pico-freertos copy_to_ram)
-
-pico_add_extra_outputs(pico-freertos)
